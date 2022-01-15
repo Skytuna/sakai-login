@@ -1,11 +1,15 @@
 import './App.css';
 import './index.css';
+import UserInfoContainer from './Components/UserInfoContainer';
+import Card from './Components/Card';
+import ClassSelector from './Components/ClassSelector';
 
 function App() {
     return (
-        <div className='App'>
-            <h4 className='bg-gray-500'>berke test</h4>
-        </div>
+        <Card className='bg-gray-100 w-screen h-screen flex flex-col gap-4'>
+            <UserInfoContainer />
+            <ClassSelector />
+        </Card>
     );
 }
 
