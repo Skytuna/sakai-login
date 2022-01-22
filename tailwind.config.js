@@ -4,9 +4,18 @@ module.exports = {
     darkMode: false, // or 'media' or 'class'
     theme: {
         fontFamily: {
-            body: ['Roboto'],
+            body: ['Montserrat'],
         },
-        extend: {},
+        extend: {
+            colors: {
+                'light-gray-100': 'rgb(242,242,242)',
+                'lighter-black-300': '#4f4f4f',
+                primary: {
+                    500: '#d95550',
+                    400: '#dd6662',
+                },
+            },
+        },
     },
     variants: {
         extend: {},

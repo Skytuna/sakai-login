@@ -1,18 +1,8 @@
-import React from 'react';
-import Select from 'react-select';
+import React, { useState } from 'react';
 import Card from './Card';
 
-const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-];
 function ClassSelector() {
-    return (
-        <Card>
-            <Select options={options} />
-        </Card>
-    );
+    return <Card>asfasf</Card>;
 }
 
 export default ClassSelector;
