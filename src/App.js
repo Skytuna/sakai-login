@@ -1,7 +1,6 @@
 import './App.css';
 import './index.css';
 import UserInfoContainer from './Components/UserInfoContainer';
-import ClassSelector from './Components/ClassSelector';
 import { ContextProvider } from './Context';
 
 function App() {

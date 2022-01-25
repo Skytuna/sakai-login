@@ -1,24 +1,24 @@
 import { createContext, useState } from 'react';
 
 export const Context = createContext({
-    userName: '',
-    setUserName: () => {},
+    username: '',
+    setUsername: () => {},
     password: '',
     setPassword: () => {},
     showPassword: false,
-    showPassword: () => {},
+    setShowPassword: () => {},
 });
 
 export const ContextProvider = ({ children }) => {
-    const [userName, setUserName] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <Context.Provider
             value={{
-                userName,
-                setUserName,
+                username,
+                setUsername,
                 password,
                 setPassword,
                 showPassword,

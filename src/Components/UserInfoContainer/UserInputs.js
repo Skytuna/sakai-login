@@ -3,15 +3,15 @@ import { Context } from '../../Context';
 import UserInfoRow from './UserInfoRow';
 
 function UserInputs() {
-    const { userName, setUserName, password, setPassword } = useContext(Context);
+    const { username, setUsername, password, setPassword } = useContext(Context);
 
-    const handleUserNameChange = (e) => setUserName(e.target.value);
+    const handleUserNameChange = (e) => setUsername(e.target.value);
 
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
     return (
         <div className='relative flex flex-col gap-10 -top-12'>
-            <UserInfoRow title='Kullanıcı Adı' value={userName} onChange={handleUserNameChange} />
+            <UserInfoRow title='Kullanıcı Adı' value={username} onChange={handleUserNameChange} />
             <UserInfoRow
                 title='Şifre'
                 value={password}
