@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import RememberMe from './RememberMe';
 import Button from '../Button';
 import { Context } from '../../Context';
+import { LOGIN_EVENT } from '../../Constants';
 const { ipcRenderer } = window.require('electron');
 
 function ConfirmationRow() {
@@ -9,10 +10,7 @@ function ConfirmationRow() {
     const { username, password } = useContext(Context);
 
     const handleConfirm = () => {
-        if (rememberMe) {
-        }
-
-        ipcRenderer.send('login-event', { username, password });
+        ipcRenderer.send(LOGIN_EVENT, { username, password });
     };
 
     const toggleRememberMe = () => {

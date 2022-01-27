@@ -1,22 +1,10 @@
 const path = require('path');
 const { ipcMain, app, BrowserWindow } = require('electron');
 const webdriver = require('selenium-webdriver');
+const { LOGIN_EVENT, ALL_LESSONS_REPLY, ALL_LESSONS_STATUS } = require('../src/Constants');
+const { By } = webdriver;
 
-// Constants
 const SAKAI_URL = 'https://online.deu.edu.tr/portal';
-
-// Initiate selenium
-const driver = new webdriver.Builder()
-    .usingServer('http://localhost:9515')
-    .withCapabilities({
-        'goog:chromeOptions': {
-            binary: process.env.PORTABLE_EXECUTABLE_DIR,
-        },
-    })
-    .forBrowser('chrome')
-    .build();
-
-driver.get(SAKAI_URL);
 
 // Initiate main process
 function createWindow() {
@@ -50,14 +38,47 @@ app.on('window-all-closed', () => {
     }
 });
 
-ipcMain.on('login-event', async (_, args) => {
+ipcMain.on(LOGIN_EVENT, (event, args) => {
+    const driver = new webdriver.Builder()
+        .usingServer('http://localhost:9515')
+        .withCapabilities({
+            'goog:chromeOptions': {
+                binary: process.env.PORTABLE_EXECUTABLE_DIR,
+            },
+        })
+        .forBrowser('chrome')
+        .build();
+
+    driver.get(SAKAI_URL);
+
+    // Login
     const { username, password } = args;
+    driver.findElement(webdriver.By.id('eid')).sendKeys(username);
+    driver.findElement(webdriver.By.id('pw')).sendKeys(password);
+    driver.findElement(webdriver.By.id('submit')).click();
 
-    const usernameRef = await driver.findElement(webdriver.By.id('eid'));
-    const passwordRef = await driver.findElement(webdriver.By.id('pw'));
-    const submitBtnRef = await driver.findElement(webdriver.By.id('submit'));
+    event.reply(ALL_LESSONS_STATUS, true);
+    const lessonNames = [];
+    // Get lesson names of the user
+    setTimeout(async () => {
+        const lessonNameRefList = await driver.findElements(By.className('link-container'));
 
-    driver.executeScript("arguments[0].setAttribute('value', '" + username + "')", usernameRef);
-    driver.executeScript("arguments[0].setAttribute('value', '" + password + "')", passwordRef);
-    driver.executeScript('arguments[0].click()', submitBtnRef);
+        lessonNameRefList.forEach(async (ref) => {
+            const lessonName = await ref.getAttribute('title');
+            lessonNames.push(lessonName);
+        });
+    }, 4000);
+
+    // Send them to react app
+    setTimeout(() => {
+        event.reply(ALL_LESSONS_STATUS, false);
+        event.reply(ALL_LESSONS_REPLY, lessonNames);
+    }, 6000);
 });
+
+// TODO
+
+// Selenium serverını otomatik açtırt
+// Dersler alınıp react stateine gönderilecek
+// React stateinden dropdown yapılacak
+// Seçili ders için saat ve gün ataması yapılacak
