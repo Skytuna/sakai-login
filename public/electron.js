@@ -1,16 +1,21 @@
 const path = require('path');
-const { ipcMain, app, BrowserWindow } = require('electron');
+const electron = require('electron');
 const webdriver = require('selenium-webdriver');
 const { LOGIN_EVENT, ALL_LESSONS_REPLY, ALL_LESSONS_STATUS } = require('../src/Constants');
+const { ipcMain, app, BrowserWindow, shell } = electron;
 const { By } = webdriver;
 
 const SAKAI_URL = 'https://online.deu.edu.tr/portal';
+let driver;
 
 // Initiate main process
 function createWindow() {
+    const screen = electron.screen.getPrimaryDisplay().size;
+
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: screen.width,
+        height: screen.height,
+        fullscreen: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -24,31 +29,17 @@ function createWindow() {
     }
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+    // Create the main window
+    createWindow();
 
-app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-    }
+    initiateChromeDriverServer();
 });
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
+ipcMain.on(LOGIN_EVENT, async (event, args) => {
+    initiateChromeDriverClient();
 
-ipcMain.on(LOGIN_EVENT, (event, args) => {
-    const driver = new webdriver.Builder()
-        .usingServer('http://localhost:9515')
-        .withCapabilities({
-            'goog:chromeOptions': {
-                binary: process.env.PORTABLE_EXECUTABLE_DIR,
-            },
-        })
-        .forBrowser('chrome')
-        .build();
-
+    // Open sakai website
     driver.get(SAKAI_URL);
 
     // Login
@@ -57,9 +48,9 @@ ipcMain.on(LOGIN_EVENT, (event, args) => {
     driver.findElement(webdriver.By.id('pw')).sendKeys(password);
     driver.findElement(webdriver.By.id('submit')).click();
 
+    // Get lesson names of the user
     event.reply(ALL_LESSONS_STATUS, true);
     const lessonNames = [];
-    // Get lesson names of the user
     setTimeout(async () => {
         const lessonNameRefList = await driver.findElements(By.className('link-container'));
 
@@ -76,9 +67,33 @@ ipcMain.on(LOGIN_EVENT, (event, args) => {
     }, 6000);
 });
 
-// TODO
+const initiateChromeDriverServer = async () => {
+    // Run the ChromeDriver server
+    const executablePath = app.getAppPath() + '/node_modules/.bin/chromedriver';
+    await shell.openPath(executablePath);
+};
 
-// Selenium serverını otomatik açtırt
-// Dersler alınıp react stateine gönderilecek
-// React stateinden dropdown yapılacak
-// Seçili ders için saat ve gün ataması yapılacak
+const initiateChromeDriverClient = () => {
+    // Inititate the WebDriver server
+    driver = new webdriver.Builder()
+        .usingServer('http://localhost:9515')
+        .withCapabilities({
+            'goog:chromeOptions': {
+                binary: process.env.PORTABLE_EXECUTABLE_DIR,
+            },
+        })
+        .forBrowser('chrome')
+        .build();
+};
+
+app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
+});
+
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
