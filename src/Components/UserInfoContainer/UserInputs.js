@@ -10,7 +10,7 @@ function UserInputs() {
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
     return (
-        <div className='relative flex flex-col gap-10 -top-12'>
+        <div className='flex flex-col gap-10 relative -top-6'>
             <UserInfoRow title='Kullanıcı Adı' value={username} onChange={handleUserNameChange} />
             <UserInfoRow
                 title='Şifre'
