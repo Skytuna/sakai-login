@@ -8,7 +8,7 @@ import Card from '../Card';
 
 function AddLessonContainer() {
     return (
-        <Card className='bg-primary-400' header='DERS EKLE'>
+        <Card className='bg-primary-400 w-full' header='DERS EKLE'>
             <div className='flex flex-col gap-8 relative -top-6'>
                 <DropdownContainer title='Ders Adı'>
                     <LessonSelector />
@@ -17,7 +17,7 @@ function AddLessonContainer() {
                     <DropdownContainer title='Gün' className='w-7/12'>
                         <DaySelector />
                     </DropdownContainer>
-                    <DropdownContainer title='Saat' className='w-4/12'>
+                    <DropdownContainer title='Saat' className='w-5/12 ml-2'>
                         <HourSelector />
                     </DropdownContainer>
                 </div>

@@ -37,8 +37,7 @@ function LessonSelector() {
             isLoading={isLoading}
             isClearable={false}
             isSearchable
-            placeholder='Ders seçiniz...'
-            loadingMessage='Yükleniyor...'
+            placeholder='Ders seçiniz'
             noOptionsMessage='Hiçbir ders bulunamadı.'
         />
     );

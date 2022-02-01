@@ -5,7 +5,7 @@ import UserInputs from './UserInputs';
 
 function UserInfoContainer() {
     return (
-        <Card className='flex flex-col bg-primary-400' header='KULLANICI BİLGİLERİ'>
+        <Card className='flex flex-col bg-primary-400  w-full' header='KULLANICI BİLGİLERİ'>
             <UserInputs />
             <ConfirmationRow />
         </Card>

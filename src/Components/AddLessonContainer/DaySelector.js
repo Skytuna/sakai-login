@@ -1,4 +1,5 @@
 import React from 'react';
+import { DAYS } from '../../Constants';
 import Dropdown from '../Dropdown';
 
 function DaySelector({ onDayChange }) {
@@ -9,7 +10,7 @@ function DaySelector({ onDayChange }) {
             isLoading={false}
             isClearable={false}
             isSearchable={false}
-            placeholder='Gün seçiniz...'
+            placeholder='Gün seçiniz'
             noOptionsMessage='Hiçbir gün bulunamadı.'
         />
     );
@@ -17,25 +18,3 @@ function DaySelector({ onDayChange }) {
 
 export default DaySelector;
 
-const DAYS = [
-    {
-        label: 'Pazartesi',
-        value: 'Pazartesi',
-    },
-    {
-        label: 'Salı',
-        value: 'Salı',
-    },
-    {
-        label: 'Çarşamba',
-        value: 'Çarşamba',
-    },
-    {
-        label: 'Perşembe',
-        value: 'Perşembe',
-    },
-    {
-        label: 'Cuma',
-        value: 'Cuma',
-    },
-];
