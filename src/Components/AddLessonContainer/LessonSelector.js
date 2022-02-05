@@ -3,9 +3,8 @@ import { ALL_LESSONS_REPLY, ALL_LESSONS_STATUS } from '../../Constants';
 import Dropdown from '../Dropdown';
 const { ipcRenderer } = window.require('electron');
 
-function LessonSelector() {
+function LessonSelector({ onLessonChange }) {
     const [lessons, setLessons] = useState([]);
-    const [selectedLesson, setSelectedLesson] = useState();
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -19,21 +18,17 @@ function LessonSelector() {
     }, []);
 
     const onLessonsReply = (_, lessons) => {
-        setLessons(lessons.map((lesson) => ({ label: lesson, value: lesson })));
+        setLessons(lessons);
     };
 
     const handleLessonsStatus = (_, status) => {
         setIsLoading(status);
     };
 
-    const handleLessonChange = (lesson) => {
-        setSelectedLesson(lesson);
-    };
-
     return (
         <Dropdown
             options={lessons}
-            onChange={handleLessonChange}
+            onChange={onLessonChange}
             isLoading={isLoading}
             isClearable={false}
             isSearchable

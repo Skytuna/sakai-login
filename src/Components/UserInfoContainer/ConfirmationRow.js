@@ -4,7 +4,6 @@ import Button from '../Button';
 import { Context } from '../../Context';
 import { LOGIN_EVENT } from '../../Constants';
 const { ipcRenderer } = window.require('electron');
-// const Store = window.require('electron-store');
 
 function ConfirmationRow() {
     const [rememberMe, setRememberMe] = useState(false);

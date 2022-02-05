@@ -1,7 +1,8 @@
 const path = require('path');
 const electron = require('electron');
 const webdriver = require('selenium-webdriver');
-const { LOGIN_EVENT, ALL_LESSONS_REPLY, ALL_LESSONS_STATUS } = require('../src/Constants');
+const { LOGIN_EVENT, ALL_LESSONS_REPLY, ALL_LESSONS_STATUS } = require('../../src/Constants');
+const utils = require('./utility');
 const { ipcMain, app, BrowserWindow, shell } = electron;
 const { By } = webdriver;
 
@@ -10,11 +11,7 @@ let driver;
 
 // Initiate main process
 function createWindow() {
-    const screen = electron.screen.getPrimaryDisplay().size;
-
     const mainWindow = new BrowserWindow({
-        width: screen.width,
-        height: screen.height,
         fullscreen: true,
         webPreferences: {
             nodeIntegration: true,
@@ -63,7 +60,7 @@ ipcMain.on(LOGIN_EVENT, async (event, args) => {
     // Send them to react app
     setTimeout(() => {
         event.reply(ALL_LESSONS_STATUS, false);
-        event.reply(ALL_LESSONS_REPLY, lessonNames);
+        event.reply(ALL_LESSONS_REPLY, utils.filterLessons(lessonNames));
     }, 6000);
 });
 

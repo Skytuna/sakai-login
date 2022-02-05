@@ -2,7 +2,7 @@
     "name": "sakai-login",
     "version": "0.1.0",
     "private": true,
-    "main": "public/electron.js",
+    "main": "public/electron/index.js",
     "homepage": "./",
     "dependencies": {
         "@craco/craco": "^6.4.3",
