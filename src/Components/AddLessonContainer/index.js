@@ -7,6 +7,7 @@ import DropdownContainer from './DropdownContainer';
 import Card from '../Card';
 import UserInfoRow from '../UserInfoContainer/UserInfoRow';
 import { Context } from '../../Context';
+import { LESSON_COLORS } from '../../Constants';
 
 function AddLessonContainer() {
     const [shortLessonName, setShortLessonName] = useState('');
@@ -21,16 +22,17 @@ function AddLessonContainer() {
     };
 
     const dayHandler = (selection) => {
-        setDay(selection.value);
+        setDay(selection);
     };
 
     const hourHandler = (selection) => {
-        setHour(selection.value);
+        setHour(selection);
     };
 
     const addLesson = () => {
         const newLesson = {
-            day,
+            id: Math.random() * 100000000000,
+            day: day.value,
             color: getRandomColor(),
             name: shortLessonName,
             fullname: selectedLesson.value,
@@ -38,43 +40,40 @@ function AddLessonContainer() {
         };
 
         setSchedule((prevState) => {
-            const hourObjIndex = prevState.findIndex((i) => i.hour === hour);
+            const hourObjIndex = prevState.findIndex((i) => i.hour === hour.value);
             let newState = [...prevState];
 
             if (hourObjIndex !== -1) {
                 newState[hourObjIndex].cells.push(newLesson);
             } else {
                 newState.push({
-                    hour,
+                    hour: hour.value,
                     cells: [newLesson],
                 });
             }
 
+            clearAreas();
             return newState;
         });
     };
 
     const clearAreas = () => {
         setShortLessonName('');
-        setSelectedLesson();
-        setDay();
-        setHour();
+        setSelectedLesson(null);
+        setDay(null);
+        setHour(null);
     };
 
     function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
+        const index = Math.floor(Math.random() * LESSON_COLORS.length);
+        return LESSON_COLORS[index];
     }
 
     return (
         <Card className='bg-primary-400 w-full' header='DERS EKLE'>
             <div className='flex flex-col gap-8 relative -top-6'>
                 <DropdownContainer title='Ders Adı'>
-                    <LessonSelector onLessonChange={lessonHandler} />
+                    <LessonSelector onChange={lessonHandler} value={selectedLesson} />
                 </DropdownContainer>
                 <UserInfoRow
                     title='Kısaltılmış Ders Adı'
@@ -83,20 +82,20 @@ function AddLessonContainer() {
                 />
                 <div className='flex flex-row justify-between'>
                     <DropdownContainer title='Gün' className='w-7/12'>
-                        <DaySelector onDayChange={dayHandler} />
+                        <DaySelector onChange={dayHandler} value={day} />
                     </DropdownContainer>
                     <DropdownContainer title='Saat' className='w-5/12 ml-2'>
-                        <HourSelector onHourChange={hourHandler} />
+                        <HourSelector onChange={hourHandler} value={hour} />
                     </DropdownContainer>
                 </div>
                 <div className='flex flex-row justify-between'>
                     <Button
-                        className='bg-primary-400 text-white hover:bg-primary-300'
+                        className='bg-primary-400 text-white hover:bg-red-400'
                         title='TEMİZLE'
                         onClick={clearAreas}
                     />
                     <Button
-                        className='bg-white text-lighter-black-300 hover:bg-gray-100'
+                        className='bg-white text-lighter-black-300 hover:bg-gray-100 border-b-2 active:border-primary-400 active:scale-95 border-gray-300'
                         title='EKLE'
                         onClick={addLesson}
                     />

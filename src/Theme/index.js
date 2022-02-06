@@ -21,4 +21,5 @@ export const COLORS = {
     black: {
         400: '#4f4f4f',
     },
+    success: '#4BB543'
 };

@@ -1,6 +1,6 @@
 export const getCellData = (schedule, hour, day) => {
     const defaultCell = {
-        id: Math.random(),
+        id: '',
         day: '',
         color: '',
         name: '',

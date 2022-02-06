@@ -43,7 +43,7 @@ function ConfirmationRow() {
                 id='login-btn'
                 title='ONAYLA'
                 onClick={handleConfirm}
-                className='relative self-end bg-white hover:bg-gray-100'
+                className='relative self-end bg-white hover:bg-gray-100 border-b-2 active:border-primary-400 active:scale-95 border-gray-300'
             />
         </div>
     );

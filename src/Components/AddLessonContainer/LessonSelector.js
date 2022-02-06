@@ -3,7 +3,7 @@ import { ALL_LESSONS_REPLY, ALL_LESSONS_STATUS } from '../../Constants';
 import Dropdown from '../Dropdown';
 const { ipcRenderer } = window.require('electron');
 
-function LessonSelector({ onLessonChange }) {
+function LessonSelector(props) {
     const [lessons, setLessons] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -27,8 +27,8 @@ function LessonSelector({ onLessonChange }) {
 
     return (
         <Dropdown
+            {...props}
             options={lessons}
-            onChange={onLessonChange}
             isLoading={isLoading}
             isClearable={false}
             isSearchable

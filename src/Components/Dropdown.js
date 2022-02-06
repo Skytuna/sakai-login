@@ -5,6 +5,7 @@ import Select from 'react-select';
 function Dropdown({
     options,
     onChange,
+    value,
     isLoading,
     isClearable,
     isSearchable,
@@ -15,6 +16,7 @@ function Dropdown({
         <Select
             options={options}
             onChange={onChange}
+            value={value}
             styles={colourStyles}
             isLoading={isLoading !== undefined ? isLoading : false}
             isClearable={isClearable !== undefined ? isClearable : false}

@@ -26,10 +26,12 @@ function ScheduleRow({ hour }) {
                       const cell = getCellData(schedule, hour, day.value);
                       return (
                           <ScheduleCell
+                              id={cell.id}
                               key={`${hour}-${day.value}`}
                               name={cell.name}
                               color={cell.color}
                               code={cell.code}
+                              hour={hour}
                           />
                       );
                   })}

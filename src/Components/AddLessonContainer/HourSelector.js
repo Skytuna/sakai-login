@@ -2,11 +2,11 @@ import React from 'react';
 import { HOURS } from '../../Constants';
 import Dropdown from '../Dropdown';
 
-function HourSelector({ onHourChange }) {
+function HourSelector(props) {
     return (
         <Dropdown
+            {...props}
             options={HOURS}
-            onChange={onHourChange}
             isLoading={false}
             isClearable={false}
             isSearchable={false}

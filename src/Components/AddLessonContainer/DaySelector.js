@@ -2,11 +2,11 @@ import React from 'react';
 import { DAYS } from '../../Constants';
 import Dropdown from '../Dropdown';
 
-function DaySelector({ onDayChange }) {
+function DaySelector(props) {
     return (
         <Dropdown
+            {...props}
             options={DAYS}
-            onChange={onDayChange}
             isLoading={false}
             isClearable={false}
             isSearchable={false}
@@ -17,4 +17,3 @@ function DaySelector({ onDayChange }) {
 }
 
 export default DaySelector;
-
