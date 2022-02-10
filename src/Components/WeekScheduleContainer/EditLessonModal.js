@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ModalContent from '../ModalContent';
 import Modal from 'react-modal';
 import { Context } from '../../Context';
@@ -7,8 +7,20 @@ import UserInfoRow from '../UserInfoContainer/UserInfoRow';
 function EditLessonModal() {
     const [name, setName] = useState('');
     const [code, setCode] = useState('');
-    const { showModal, setShowModal, setSchedule, selectedCell, setSelectedCell } =
+    const { showModal, setShowModal, schedule, setSchedule, selectedCell, setSelectedCell } =
         useContext(Context);
+
+    useEffect(() => {
+        if (showModal) {
+            const { id, hour } = selectedCell;
+            const hourObjIndex = schedule.findIndex((o) => o.hour === hour);
+            const oldCells = schedule[hourObjIndex].cells;
+            const cellIndex = oldCells.findIndex((c) => c.id === id);
+            const oldCell = oldCells[cellIndex];
+            setName(oldCell.name);
+            setCode(oldCell.code);
+        }
+    }, [showModal]);
 
     const handleConfirm = () => {
         setSchedule((prevState) => {
