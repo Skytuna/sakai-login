@@ -8,12 +8,14 @@ import Card from '../Card';
 import UserInfoRow from '../UserInfoContainer/UserInfoRow';
 import { Context } from '../../Context';
 import { LESSON_COLORS } from '../../Constants';
+import AddFailedMessage from './AddFailedMessage';
 
 function AddLessonContainer() {
     const [shortLessonName, setShortLessonName] = useState('');
     const [selectedLesson, setSelectedLesson] = useState();
     const [day, setDay] = useState();
     const [hour, setHour] = useState();
+    const [cellErrorStatus, setCellErrorStatus] = useState(false);
 
     const { setSchedule } = useContext(Context);
 
@@ -44,7 +46,12 @@ function AddLessonContainer() {
             let newState = [...prevState];
 
             if (hourObjIndex !== -1) {
-                newState[hourObjIndex].cells.push(newLesson);
+                const isCellTaken = newState[hourObjIndex].cells.find((c) => c.day === day.value);
+                if (isCellTaken) {
+                    setCellErrorStatus((prevS) => !prevS);
+                } else {
+                    newState[hourObjIndex].cells.push(newLesson);
+                }
             } else {
                 newState.push({
                     hour: hour.value,
@@ -64,10 +71,12 @@ function AddLessonContainer() {
         setHour(null);
     };
 
-    function getRandomColor() {
+    const getRandomColor = () => {
         const index = Math.floor(Math.random() * LESSON_COLORS.length);
         return LESSON_COLORS[index];
-    }
+    };
+
+    const isConfirmDisabled = !(day && hour && shortLessonName && selectedLesson);
 
     return (
         <Card className='bg-primary-400 w-full' header='DERS EKLE'>
@@ -98,9 +107,11 @@ function AddLessonContainer() {
                         className='bg-white text-lighter-black-300 hover:bg-gray-100 border-b-2 active:border-primary-400 active:scale-95 border-gray-300'
                         title='EKLE'
                         onClick={addLesson}
+                        disabled={isConfirmDisabled}
                     />
                 </div>
             </div>
+            <AddFailedMessage status={cellErrorStatus} />
         </Card>
     );
 }
