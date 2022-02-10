@@ -8,12 +8,12 @@ import WeekScheduleContainer from './Components/WeekScheduleContainer';
 function App() {
     return (
         <ContextProvider>
-            <div className='white w-screen h-screen flex flex-row bg-primary-500 gap-4 p-8 justify-between'>
-                <div className='w-3/12 flex flex-col gap-6 justify-between'>
+            <div className='w-full h-full min-h-screen flex flex-col bg-primary-500 gap-4 p-8 justify-between xl:flex-row'>
+                <div className='w-3/12 flex flex-row gap-6 justify-between xl:flex-col'>
                     <UserInfoContainer />
                     <AddLessonContainer />
                 </div>
-                <div className='w-7/12 grid gap-6 auto-rows-fr mr-10 mb-20'>
+                <div className='w-7/12 grid gap-6 auto-rows-fr mr-10 mb-16'>
                     <WeekScheduleContainer />
                 </div>
             </div>

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Context } from '../../Context';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 
-function UserInfoRow({ title, value, onChange, isPassword }) {
+function UserInfoRow({ title, value, onChange, isPassword, inputClasses, titleClasses }) {
     const { showPassword, setShowPassword } = useContext(Context);
 
     const togglePasswordIcon = () => {
@@ -15,13 +15,15 @@ function UserInfoRow({ title, value, onChange, isPassword }) {
                 isPassword ? 'mt-2' : 'mt-6'
             }`}>
             <label
-                className='text-sm text-gray-50 font-body absolute mb-20 select-none'
+                className={`text-sm text-gray-50 font-body absolute mb-20 select-none ${titleClasses}`}
                 htmlFor={title}>
                 {title}
             </label>
             <input
-                className='bg-primary-500 rounded flex-grow w-1/2 px-3 py-2 border border-primary-500 hover:border-red-300
-                focus:outline-none focus:border-red-200 focus:border text-white font-normal text-base'
+                className={`bg-primary-500 rounded flex-grow w-1/2 px-3 py-2 border border-primary-500 hover:border-red-300
+                focus:outline-none focus:border-red-200 focus:border text-white font-normal text-base ${
+                    inputClasses || ''
+                }`}
                 type={isPassword && !showPassword ? 'password' : 'text'}
                 id={title}
                 name={title}

@@ -40,7 +40,6 @@ function ConfirmationRow() {
         <div className='flex flex-row justify-between items-center'>
             <RememberMe toggleRememberMe={toggleRememberMe} rememberMe={rememberMe} />
             <Button
-                id='login-btn'
                 title='ONAYLA'
                 onClick={handleConfirm}
                 className='relative self-end bg-white hover:bg-gray-100 border-b-2 active:border-primary-400 active:scale-95 border-gray-300'

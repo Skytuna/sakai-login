@@ -13,7 +13,7 @@ function ScheduleCell({ color, name, code, hour, id }) {
     const [ref, isHoveredContainer] = useHover();
     const [iconsRef, isHoveredIcons] = useHover();
 
-    const { setSchedule } = useContext(Context);
+    const { setSchedule, setShowModal, setSelectedCell } = useContext(Context);
 
     useEffect(() => {
         if (isFirstRender) {
@@ -49,7 +49,10 @@ function ScheduleCell({ color, name, code, hour, id }) {
         });
     };
 
-    const handleEditCell = () => {};
+    const handleEditCell = () => {
+        setSelectedCell({ id, hour });
+        setShowModal((prevS) => !prevS);
+    };
 
     const isHovered = isHoveredContainer || isHoveredIcons;
     return (

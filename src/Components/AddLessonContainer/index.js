@@ -31,7 +31,7 @@ function AddLessonContainer() {
 
     const addLesson = () => {
         const newLesson = {
-            id: Math.random() * 100000000000,
+            id: Math.floor(Math.random() * 1000000000),
             day: day.value,
             color: getRandomColor(),
             name: shortLessonName,
@@ -90,7 +90,7 @@ function AddLessonContainer() {
                 </div>
                 <div className='flex flex-row justify-between'>
                     <Button
-                        className='bg-primary-400 text-white hover:bg-red-400'
+                        className='!bg-primary-400 !text-white hover:!bg-red-400 border-none'
                         title='TEMİZLE'
                         onClick={clearAreas}
                     />

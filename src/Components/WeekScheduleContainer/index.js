@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { HOURS } from '../../Constants';
 import ScheduleRow from './ScheduleRow';
+import EditLessonModal from './EditLessonModal';
+import { Context } from '../../Context';
 
 function WeekScheduleContainer() {
-    return [{ value: 'header' }, ...HOURS].map((hour, i) => (
-        <ScheduleRow key={i} hour={hour.value} />
-    ));
+    const { setSchedule } = useContext(Context);
+
+    useEffect(() => {
+        const localSchedule = window.localStorage.getItem('schedule');
+        if (localSchedule) setSchedule(JSON.parse(localSchedule));
+    }, []);
+
+    return (
+        <>
+            {[{ value: 'header' }, ...HOURS].map((hour) => (
+                <ScheduleRow key={`hour-${hour.value}`} hour={hour.value} />
+            ))}
+            <EditLessonModal />
+        </>
+    );
 }
 
 export default WeekScheduleContainer;

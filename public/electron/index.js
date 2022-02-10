@@ -66,7 +66,7 @@ ipcMain.on(LOGIN_EVENT, async (event, args) => {
 
 const initiateChromeDriverServer = async () => {
     // Run the ChromeDriver server
-    const executablePath = app.getAppPath() + '/node_modules/.bin/chromedriver';
+    const executablePath = app.getAppPath() + '/node_modules/.bin/chromedriver.exe';
     await shell.openPath(executablePath);
 };
 
