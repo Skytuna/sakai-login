@@ -69,7 +69,7 @@ function EditLessonModal() {
                 header='Bir Atamayı Düzenleyiniz'
                 onClose={toggleModal}
                 onConfirm={handleConfirm}>
-                <div className='flex flex-col w-full px-4 gap-4 pb-2 pt-6'>
+                <div className='flex flex-col w-full px-4 gap-8 pb-2 pt-6'>
                     <UserInfoRow
                         title='Ders İsmi'
                         value={name}
