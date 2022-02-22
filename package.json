@@ -4,6 +4,17 @@
     "private": true,
     "main": "public/electron/index.js",
     "homepage": "./",
+    "build": {
+        "appId": "your.id",
+        "mac": {
+            "category": "your.app.category.type"
+        },
+        "extends": null,
+        "files": [
+            "dist/**/*",
+            "package.json"
+        ]
+    },
     "dependencies": {
         "@craco/craco": "^6.4.3",
         "@headlessui/react": "^1.4.3",
@@ -14,11 +25,13 @@
         "concurrently": "^7.0.0",
         "cross-env": "^7.0.3",
         "electron-chromedriver": "^16.0.0",
+        "node-schedule": "^2.1.0",
         "postcss": "7",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-dropdown": "^1.9.2",
         "react-icons": "^4.3.1",
+        "react-modal": "^3.14.4",
         "react-scripts": "5.0.0",
         "react-select": "^5.2.2",
         "selenium-webdriver": "^4.1.1",
@@ -30,7 +43,9 @@
         "start": "concurrently \"cross-env BROWSER=none cross-env TAILWIND_MODE=watch craco start\" \"wait-on http://localhost:3000 && electron .\"",
         "build": "craco build",
         "test": "craco test",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "pack": "electron-builder --dir",
+        "dist": "electron-builder"
     },
     "eslintConfig": {
         "extends": [
@@ -51,6 +66,7 @@
         ]
     },
     "devDependencies": {
-        "electron": "^16.0.7"
+        "electron": "^16.0.7",
+        "electron-builder": "^22.14.13"
     }
 }

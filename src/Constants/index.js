@@ -2,6 +2,11 @@ module.exports = {
     LOGIN_EVENT: 'LOGIN_EVENT',
     ALL_LESSONS_REPLY: 'ALL_LESSONS_REPLY',
     ALL_LESSONS_STATUS: 'ALL_LESSONS_STATUS',
+    IS_AUTHORIZED: 'IS_AUTHORIZED',
+    SCHEDULE: {
+        ADD_LESSON: 'ADD_LESSON',
+        REMOVE_LESSON: 'REMOVE_LESSON',
+    },
     DAYS: [
         {
             label: 'Pazartesi',

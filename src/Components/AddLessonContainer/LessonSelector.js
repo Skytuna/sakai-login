@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ALL_LESSONS_REPLY, ALL_LESSONS_STATUS } from '../../Constants';
+import { ALL_LESSONS_REPLY, ALL_LESSONS_STATUS, IS_AUTHORIZED } from '../../Constants';
 import Dropdown from '../Dropdown';
 const { ipcRenderer } = window.require('electron');
 
@@ -10,10 +10,12 @@ function LessonSelector(props) {
     useEffect(() => {
         ipcRenderer.on(ALL_LESSONS_REPLY, onLessonsReply);
         ipcRenderer.on(ALL_LESSONS_STATUS, handleLessonsStatus);
+        ipcRenderer.on(IS_AUTHORIZED, handleAuth);
 
         return () => {
             ipcRenderer.removeListener(ALL_LESSONS_REPLY, onLessonsReply);
             ipcRenderer.removeListener(ALL_LESSONS_STATUS, handleLessonsStatus);
+            ipcRenderer.removeListener(IS_AUTHORIZED, handleAuth);
         };
     }, []);
 
@@ -23,6 +25,10 @@ function LessonSelector(props) {
 
     const handleLessonsStatus = (_, status) => {
         setIsLoading(status);
+    };
+
+    const handleAuth = (_, isAuth) => {
+        window.localStorage.setItem('isAuthorized', JSON.stringify(isAuth));
     };
 
     return (

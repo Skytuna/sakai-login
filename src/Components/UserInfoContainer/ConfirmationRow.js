@@ -17,7 +17,20 @@ function ConfirmationRow() {
             setRememberMe(user.rememberMe);
             ipcRenderer.send(LOGIN_EVENT, { username: user.username, password: user.password });
         }
+
+        return () => {
+            window.localStorage.setItem('isAuthorized', JSON.stringify(false));
+        };
     }, []);
+
+    useEffect(() => {
+        const isAuthorized = JSON.parse(window.localStorage.getItem('isAuthorized'));
+        const user = JSON.parse(window.localStorage.getItem('user'));
+
+        if (!isAuthorized) {
+            ipcRenderer.send(LOGIN_EVENT, { username: user.username, password: user.password });
+        }
+    }, [JSON.parse(window.localStorage.getItem('isAuthorized'))]);
 
     const handleConfirm = () => {
         if (rememberMe) {
