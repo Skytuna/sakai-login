@@ -65,12 +65,11 @@ ipcMain.on(LOGIN_EVENT, async (event, user) => {
 });
 
 ipcMain.on(ADD_LESSON, async (event, args) => {
-    const { name, hour, day } = args;
-    const jobName = hour.toString() + day.toString();
+    const { name, hour, day, jobName } = args;
 
     let rule;
     if (day == 5) {
-        rule = { hour: 23, minute: 46, dayOfWeek: 2 };
+        rule = { hour: 01, minute: 17, dayOfWeek: 4 };
     } else {
         rule = { hour, minute: 0, dayOfWeek: day };
     }
@@ -79,33 +78,62 @@ ipcMain.on(ADD_LESSON, async (event, args) => {
     const j = schedule.scheduleJob(jobName, rule, onTrigger);
 });
 
-ipcMain.on(REMOVE_LESSON, async (event, args) => {
-    const { hour, day } = args;
-
-    schedule.scheduledJobs[hour + day].cancel();
+ipcMain.on(REMOVE_LESSON, async (event, { jobName }) => {
+    schedule.scheduledJobs[jobName].cancel();
 });
 
 const joinToLesson = async (lessonName) => {
     const user = await getFromLocalStorage('user');
     loginToSakai(user);
 
-    const lessonRef = driver.findElement(webdriver.By.css(`a[title="${lessonName}"]`));
-    const lessonUrl = lessonRef.getAttribute('href');
+    const lessonRef = await driver.findElement(webdriver.By.css(`a[title="${lessonName}"]`));
+    const lessonUrl = await lessonRef.getAttribute('href');
 
-    driver.get(lessonUrl);
+    await driver.get(lessonUrl);
+
+    const liveLessonBtn = await driver.wait(
+        webdriver.until.elementLocated(
+            By.css(
+                `a[title="Canlı Ders - Sakai Interface onto the BigBlueButton conferencing tool"]`,
+            ),
+        ),
+    );
+
+    await liveLessonBtn.click();
+
+    // Try to join
+    try {
+        const rows = await driver.findElements(webdriver.By.className('meetingRow'));
+        for (const row of rows) {
+            const cells = await row.findElements(webdriver.By.css('td'));
+            const cellText = await cells[1].getText();
+            console.log(cellText);
+        }
+    } catch (e) {
+        console.log('Table not found.');
+        console.warn(e);
+    }
 };
 
-const loginToSakai = (user) => {
+const loginToSakai = async (user) => {
     const { username, password } = user;
     if (!driver) initiateChromeDriverClient();
 
     // Open sakai website
-    driver.get(SAKAI_URL);
+    await driver.get(SAKAI_URL);
 
     // Login
-    driver.findElement(webdriver.By.id('eid')).sendKeys(username);
-    driver.findElement(webdriver.By.id('pw')).sendKeys(password);
-    driver.findElement(webdriver.By.id('submit')).click();
+    try {
+        const usernameRef = await driver.wait(webdriver.until.elementLocated(By.id('eid')));
+        const passwordRef = await driver.wait(webdriver.until.elementLocated(By.id('pw')));
+        const submitRef = await driver.wait(webdriver.until.elementLocated(By.id('submit')));
+
+        await usernameRef.sendKeys(username);
+        await passwordRef.sendKeys(password);
+        await submitRef.click();
+    } catch (e) {
+        console.log('Already logged in!');
+    }
 };
 
 const initiateChromeDriverServer = async () => {

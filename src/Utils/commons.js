@@ -64,6 +64,8 @@ export const convertScheduleObj = (schedule) => {
                 name: lesson.fullname,
                 hour: convertHourString(hour),
                 day: convertTurkishDay(lesson.day),
+                jobName:
+                    convertHourString(hour).toString() + convertTurkishDay(lesson.day).toString(),
             });
         });
     }
