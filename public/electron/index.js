@@ -69,7 +69,7 @@ ipcMain.on(ADD_LESSON, async (event, args) => {
 
     let rule;
     if (day == 5) {
-        rule = { hour: 01, minute: 17, dayOfWeek: 4 };
+        rule = { hour: 09, minute: 31, dayOfWeek: 1 };
     } else {
         rule = { hour, minute: 0, dayOfWeek: day };
     }
@@ -106,11 +106,24 @@ const joinToLesson = async (lessonName) => {
         const rows = await driver.findElements(webdriver.By.className('meetingRow'));
         for (const row of rows) {
             const cells = await row.findElements(webdriver.By.css('td'));
-            const cellText = await cells[1].getText();
-            console.log(cellText);
+            const statusText = await cells[1].getText();
+
+            if (statusText === '') {
+                // Status cell is empty when that class is active on SAKAI
+                const lessonLink = await row.findElement(webdriver.By.css('a'));
+                lessonLink.click();
+
+                setTimeout(async () => {
+                    const meetingLink = await driver.findElement(
+                        webdriver.By.id('joinMeetingLink'),
+                    );
+                    meetingLink.click();
+                }, 2000);
+                break;
+            }
         }
     } catch (e) {
-        console.log('Table not found.');
+        console.log('Error when trying to join lesson.');
         console.warn(e);
     }
 };
