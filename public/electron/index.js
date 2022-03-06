@@ -9,16 +9,43 @@ const {
     IS_AUTHORIZED,
 } = require('../../src/Constants');
 const utils = require('./utility');
-const { ipcMain, app, BrowserWindow, shell } = electron;
+const { ipcMain, app, BrowserWindow, shell, Tray, nativeImage, Menu } = electron;
 const { By } = webdriver;
 const schedule = require('node-schedule');
+const AutoLaunch = require('auto-launch');
 
 const SAKAI_URL = 'https://online.deu.edu.tr/portal';
 let driver;
 let mainWindow;
+let tray = null;
+
+function createTray() {
+    const icon = path.join(__dirname, '../logo.png');
+    const trayicon = nativeImage.createFromPath(icon);
+    tray = new Tray(trayicon.resize({ width: 16 }));
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: 'Show App',
+            click: () => {
+                if (!mainWindow) createWindow();
+            },
+        },
+        {
+            label: 'Quit',
+            click: () => {
+                app.quit(); // Quit the app.
+                if (driver) driver.quit(); // Quit the WebDriver
+            },
+        },
+    ]);
+    tray.setToolTip(app.name);
+    tray.setContextMenu(contextMenu);
+}
 
 // Initiate main process
 function createWindow() {
+    if (!tray) createTray();
+
     mainWindow = new BrowserWindow({
         fullscreen: true,
         webPreferences: {
@@ -32,14 +59,11 @@ function createWindow() {
     } else {
         mainWindow.loadURL('http://localhost:3000');
     }
+
+    mainWindow.on('closed', function () {
+        mainWindow = null;
+    });
 }
-
-app.whenReady().then(() => {
-    // Create the main window
-    createWindow();
-
-    initiateChromeDriverServer();
-});
 
 ipcMain.on(LOGIN_EVENT, async (event, user) => {
     loginToSakai(user);
@@ -69,10 +93,11 @@ ipcMain.on(ADD_LESSON, async (event, args) => {
 
     let rule;
     if (day == 5) {
-        rule = { hour: 09, minute: 31, dayOfWeek: 1 };
+        rule = { hour: 16, minute: 21, dayOfWeek: 0 };
     } else {
-        rule = { hour, minute: 0, dayOfWeek: day };
+        rule = { hour, dayOfWeek: day };
     }
+    // rule = { hour, dayOfWeek: day };
     const onTrigger = () => joinToLesson(name);
 
     const j = schedule.scheduleJob(jobName, rule, onTrigger);
@@ -173,14 +198,17 @@ const getFromLocalStorage = async (key) => {
     return val;
 };
 
-app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
-    }
+app.on('ready', () => {
+    initiateChromeDriverServer();
+    createWindow();
+
+    let autoLaunch = new AutoLaunch({
+        name: app.name,
+        path: app.getPath('exe'),
+    });
+    autoLaunch.isEnabled().then((isEnabled) => {
+        if (!isEnabled) autoLaunch.enable();
+    });
 });
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
+app.on('window-all-closed', () => {});
