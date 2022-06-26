@@ -1,4 +1,4 @@
-An application that allows you to login your classes automatically in Sakai.
+A UI that allows you to schedule classes for Sakai (Dokuz Eylül University online class platform). It will also login by your account to live classes.
 
 ![image](https://user-images.githubusercontent.com/72658150/164252244-6a418f7a-fffe-47fc-93b2-7270564518aa.png)
 
